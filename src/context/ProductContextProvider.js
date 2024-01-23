@@ -5,6 +5,7 @@ export const productContext = createContext();
 
 const ProductContextProvider = ({ children }) => {
   const [todos, setTodos] = useState([]);
+  const [oneTodo, setOneTodo] = useState("");
 
   // ! create
   const addTodo = async (todo) => {
@@ -22,10 +23,30 @@ const ProductContextProvider = ({ children }) => {
     }
   };
 
+  // ! Delete
+  const deleteTodo = async (id) => {
+    await axios.delete(`${API}/${id}`);
+    getTodos();
+  };
+
+  // ! Edit
+  const editTodo = async (newTodo, id) => {
+    await axios.patch(`${API}/${id}`, newTodo);
+  };
+  // ! getOneProduct
+  const getOneProduct = async (id) => {
+    const { data } = await axios(`${API}/${id}`);
+    setOneTodo(data);
+  };
+
   const values = {
     addTodo,
     getTodos,
+    deleteTodo,
+    editTodo,
+    getOneProduct,
     todos,
+    oneTodo,
   };
 
   return (
